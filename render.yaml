@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: controlled-teleportation-qds-api
+    runtime: python
+    rootDir: .
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: VITE_FRONTEND_ORIGIN
+        sync: false
