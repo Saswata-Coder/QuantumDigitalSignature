@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import base64
 import io
 import secrets
@@ -28,11 +29,19 @@ from quantum.states import density_matrix, fidelity, normalize_state
 app = FastAPI(title="Controlled-Teleportation QDS API", version="2.0.0")
 
 # Set VITE_FRONTEND_ORIGIN in production, e.g. https://your-site.netlify.app
-origins = [o.strip() for o in __import__("os").getenv("VITE_FRONTEND_ORIGIN", "http://localhost:5173,http://127.0.0.1:5173").split(",") if o.strip()]
+# origins = [o.strip() for o in __import__("os").getenv("VITE_FRONTEND_ORIGIN", "http://localhost:5173,http://127.0.0.1:5173").split(",") if o.strip()]
+frontend_origin = os.getenv(
+    "FRONTEND_ORIGIN",
+    "http://localhost:5173"
+)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://quantum-digital-system.netlify.app/",
+        frontend_origin,
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://quantum-digital-system.netlify.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
